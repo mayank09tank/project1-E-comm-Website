@@ -1,0 +1,156 @@
+{% extends 'base.html' %}  <!-- बेस टेम्पलेट से एक्सटेंड करके कॉमन लेआउट प्राप्त करना -->
+
+{% block title %}BikesCars - Buy Bikes and Cars Online{% endblock %}  <!-- ब्राउज़र टैब में दिखने वाला टाइटल -->
+
+{% block content %}  <!-- बेस टेम्पलेट में कंटेंट ब्लॉक को रिप्लेस करेगा -->
+<!-- हीरो सेक्शन - वेबसाइट का मुख्य आकर्षण ऊपरी भाग -->
+<section class="hero-section">
+    <div class="container">  <!-- कंटेंट को सेंटर में रखने के लिए कंटेनर -->
+        <h1 class="display-4">Welcome to BikesCars</h1>  <!-- मुख्य हेडिंग बड़े फॉन्ट साइज के साथ -->
+        <p class="lead">Your one-stop destination for quality bikes and cars</p>  <!-- सबहेडिंग -->
+        <a href="#featured-products" class="btn btn-light btn-lg mt-3">  <!-- फीचर्ड प्रोडक्ट्स सेक्शन का लिंक -->
+            Explore Products <i class="fas fa-arrow-right ms-2"></i>  <!-- टेक्स्ट के साथ राइट एरो आइकन -->
+        </a>
+    </div>
+</section>
+
+<!-- फीचर्ड प्रोडक्ट्स सेक्शन -->
+<section id="featured-products" style="padding: 60px 0;">  <!-- पैडिंग जोड़कर सेक्शन को स्पेस देना -->
+    <div class="container">  <!-- कंटेंट को सेंटर में रखने के लिए कंटेनर -->
+        <h2 class="text-center mb-5">Featured Products</h2>  <!-- सेक्शन का टाइटल सेंटर में -->
+        
+        <!-- टैब्स फॉर कैटेगरी फिल्टरिंग -->
+        <ul class="nav nav-tabs justify-content-center mb-4">  <!-- नेविगेशन टैब्स सेंटर में -->
+            <li class="nav-item">  <!-- सभी प्रोडक्ट्स का टैब -->
+                <a class="nav-link active" data-bs-toggle="tab" href="#all">All Products</a>  <!-- डिफॉल्ट एक्टिव टैब -->
+            </li>
+            <li class="nav-item">  <!-- बाइक्स का टैब -->
+                <a class="nav-link" data-bs-toggle="tab" href="#bikes">Bikes</a>
+            </li>
+            <li class="nav-item">  <!-- कार्स का टैब -->
+                <a class="nav-link" data-bs-toggle="tab" href="#cars">Cars</a>
+            </li>
+        </ul>
+        
+        <!-- टैब कंटेंट - प्रोडक्ट्स डिस्प्ले -->
+        <div class="tab-content">
+            <!-- ऑल प्रोडक्ट्स टैब पैनल -->
+            <div class="tab-pane fade show active" id="all">  <!-- डिफॉल्ट विज़िबल पैनल -->
+                <div class="row">  <!-- प्रोडक्ट्स के लिए ग्रिड रो -->
+                    {% for product in products %}  <!-- सभी प्रोडक्ट्स पर इटरेट करना -->
+                    <div class="col-md-3 mb-4">  <!-- 4 प्रोडक्ट्स प्रति रो (मीडियम स्क्रीन पर) -->
+                        <div class="product-card">  <!-- प्रोडक्ट कार्ड डिज़ाइन -->
+                            <img src="{{ url_for('static', filename='images/' + product.image) }}" class="product-img" alt="{{ product.name }}">  <!-- प्रोडक्ट इमेज -->
+                            <div class="p-3">  <!-- कार्ड कंटेंट को पैडिंग देना -->
+                                <h5>{{ product.name }}</h5>  <!-- प्रोडक्ट का नाम -->
+                                <p class="text-muted">{{ product.description[:50] }}...</p>  <!-- शॉर्ट डिस्क्रिप्शन (50 कैरेक्टर्स) -->
+                                <div class="d-flex justify-content-between align-items-center">  <!-- प्राइस और बटन का लेआउट -->
+                                    <span class="fw-bold">${{ product.price }}</span>  <!-- प्रोडक्ट की कीमत -->
+                                    <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-sm btn-outline-secondary">  <!-- डिटेल पेज का लिंक -->
+                                        View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- बाइक्स टैब पैनल -->
+            <div class="tab-pane fade" id="bikes">  <!-- शुरू में हिडन पैनल, टैब क्लिक पर दिखेगा -->
+                <div class="row">  <!-- प्रोडक्ट्स के लिए ग्रिड रो -->
+                    {% for product in products if product.category == 'bike' %}  <!-- सिर्फ बाइक कैटेगरी के प्रोडक्ट्स फिल्टर करना -->
+                    <div class="col-md-3 mb-4">  <!-- 4 प्रोडक्ट्स प्रति रो (मीडियम स्क्रीन पर) -->
+                        <div class="product-card">  <!-- प्रोडक्ट कार्ड डिज़ाइन -->
+                            <img src="{{ url_for('static', filename='images/' + product.image) }}" class="product-img" alt="{{ product.name }}">  <!-- प्रोडक्ट इमेज -->
+                            <div class="p-3">  <!-- कार्ड कंटेंट को पैडिंग देना -->
+                                <h5>{{ product.name }}</h5>  <!-- प्रोडक्ट का नाम -->
+                                <p class="text-muted">{{ product.description[:50] }}...</p>  <!-- शॉर्ट डिस्क्रिप्शन (50 कैरेक्टर्स) -->
+                                <div class="d-flex justify-content-between align-items-center">  <!-- प्राइस और बटन का लेआउट -->
+                                    <span class="fw-bold">${{ product.price }}</span>  <!-- प्रोडक्ट की कीमत -->
+                                    <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-sm btn-outline-secondary">  <!-- डिटेल पेज का लिंक -->
+                                        View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- कार्स टैब पैनल -->
+            <div class="tab-pane fade" id="cars">  <!-- शुरू में हिडन पैनल, टैब क्लिक पर दिखेगा -->
+                <div class="row">  <!-- प्रोडक्ट्स के लिए ग्रिड रो -->
+                    {% for product in products if product.category == 'car' %}  <!-- सिर्फ कार कैटेगरी के प्रोडक्ट्स फिल्टर करना -->
+                    <div class="col-md-3 mb-4">  <!-- 4 प्रोडक्ट्स प्रति रो (मीडियम स्क्रीन पर) -->
+                        <div class="product-card">  <!-- प्रोडक्ट कार्ड डिज़ाइन -->
+                            <img src="{{ url_for('static', filename='images/' + product.image) }}" class="product-img" alt="{{ product.name }}">  <!-- प्रोडक्ट इमेज -->
+                            <div class="p-3">  <!-- कार्ड कंटेंट को पैडिंग देना -->
+                                <h5>{{ product.name }}</h5>  <!-- प्रोडक्ट का नाम -->
+                                <p class="text-muted">{{ product.description[:50] }}...</p>  <!-- शॉर्ट डिस्क्रिप्शन (50 कैरेक्टर्स) -->
+                                <div class="d-flex justify-content-between align-items-center">  <!-- प्राइस और बटन का लेआउट -->
+                                    <span class="fw-bold">${{ product.price }}</span>  <!-- प्रोडक्ट की कीमत -->
+                                    <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-sm btn-outline-secondary">  <!-- डिटेल पेज का लिंक -->
+                                        View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="about-section" style="padding: 60px 0; background-color: var(--light-color);">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+            <div>
+                <h2 style="color: var(--dark-color); margin-bottom: 20px;">About BikesCars</h2>
+                <p style="margin-bottom: 20px; line-height: 1.6;">We are dedicated to providing the highest quality bikes and cars to our customers. With a wide range of options for every budget and need, BikesCars is your one-stop destination for all your transportation needs.</p>
+                <p style="margin-bottom: 20px; line-height: 1.6;">Our team of experts is always ready to help you find the perfect ride that suits your lifestyle.</p>
+            </div>
+            
+            <div>
+                <h3 style="color: var(--dark-color); margin-bottom: 20px;">Why Choose Us?</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 15px; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px; font-size: 20px;"></i>
+                        <span>Premium Quality Products</span>
+                    </li>
+                    <li style="margin-bottom: 15px; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px; font-size: 20px;"></i>
+                        <span>Expert Customer Support</span>
+                    </li>
+                    <li style="margin-bottom: 15px; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px; font-size: 20px;"></i>
+                        <span>Fast & Secure Checkout</span>
+                    </li>
+                    <li style="margin-bottom: 15px; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px; font-size: 20px;"></i>
+                        <span>Warranty on All Products</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section style="padding: 60px 0; background-color: var(--primary-color); color: white; text-align: center;">
+    <div class="container">
+        <h2 style="margin-bottom: 20px;">Subscribe to Our Newsletter</h2>
+        <p style="margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto;">Stay updated with the latest products, exclusive offers, and industry news.</p>
+        
+        <form style="max-width: 500px; margin: 0 auto; display: flex; gap: 10px;">
+            <input type="email" placeholder="Your Email Address" required style="flex: 1; padding: 12px; border: none; border-radius: 4px; font-size: 16px;">
+            <button type="submit" class="btn" style="background-color: var(--dark-color); border: none;">Subscribe</button>
+        </form>
+    </div>
+</section>
+{% endblock %} 

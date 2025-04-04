@@ -1,0 +1,44 @@
+{% extends 'base.html' %}  {# Inherit from base template for consistent layout #}
+
+{% block title %}Login - BikesCars{% endblock %}  {# Set page title in browser tab #}
+
+{% block content %}  {# Begin content block that will replace the content block in base.html #}
+<section style="padding: 60px 0;">  {# Main section with top/bottom padding #}
+    <div class="container">  {# Container for content alignment #}
+        <div class="auth-container">  {# Container specifically styled for authentication forms #}
+            <h2 class="auth-title">Login to Your Account</h2>  {# Main heading #}
+            
+            <form action="{{ url_for('login') }}" method="post" class="needs-validation">  {# Form that submits to login route using POST method #}
+                <div class="form-group">  {# Container for username field group #}
+                    <label for="username" class="form-label">Username</label>  {# Label for username input #}
+                    <input type="text" id="username" name="username" class="form-input" required autofocus>  {# Username input field, required, and focused on page load #}
+                </div>
+                
+                <div class="form-group">  {# Container for password field group #}
+                    <label for="password" class="form-label">Password</label>  {# Label for password input #}
+                    <input type="password" id="password" name="password" class="form-input" required>  {# Password input field, masked for security #}
+                </div>
+                
+                <div style="display: flex; align-items: center; margin-bottom: 20px;">  {# Container for remember me checkbox with alignment #}
+                    <input type="checkbox" id="remember" name="remember" style="margin-right: 10px;">  {# Remember me checkbox #}
+                    <label for="remember">Remember me</label>  {# Label for remember checkbox #}
+                </div>
+                
+                <button type="submit" class="btn btn-secondary" style="width: 100%;">Login</button>  {# Submit button for the form, full width #}
+            </form>
+            
+            <a href="{{ url_for('forgot_password') }}" class="auth-link">Forgot your password?</a>  {# Link to password reset page #}
+            <a href="{{ url_for('register') }}" class="auth-link">Don't have an account? Register now</a>  {# Link to registration page #}
+            
+            <div style="margin-top: 30px; text-align: center;">  {# Social login section with top margin #}
+                <p style="margin-bottom: 15px; color: #666;">Or login with</p>  {# Text for social login options #}
+                <div style="display: flex; justify-content: center; gap: 20px;">  {# Container for social icons with spacing #}
+                    <a href="#" style="color: #3b5998; font-size: 24px;"><i class="fab fa-facebook"></i></a>  {# Facebook icon with brand color #}
+                    <a href="#" style="color: #db4a39; font-size: 24px;"><i class="fab fa-google"></i></a>  {# Google icon with brand color #}
+                    <a href="#" style="color: #00acee; font-size: 24px;"><i class="fab fa-twitter"></i></a>  {# Twitter icon with brand color #}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

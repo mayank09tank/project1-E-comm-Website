@@ -1,0 +1,56 @@
+{% extends 'base.html' %}  <!-- बेस टेम्पलेट से एक्सटेंड करके कॉमन लेआउट प्राप्त करना -->
+
+{% block title %}Register - BikesCars{% endblock %}  <!-- ब्राउज़र टैब में दिखने वाला टाइटल -->
+
+{% block content %}  <!-- बेस टेम्पलेट में कंटेंट ब्लॉक को रिप्लेस करेगा -->
+<section style="padding: 60px 0;">  <!-- मुख्य सेक्शन के लिए ऊपर और नीचे पैडिंग -->
+    <div class="container">  <!-- कंटेंट को सेंटर में रखने के लिए कंटेनर -->
+        <div class="auth-container">  <!-- ऑथेंटिकेशन फॉर्म के लिए विशेष कंटेनर -->
+            <h2 class="auth-title">Create Your Account</h2>  <!-- फॉर्म का मुख्य शीर्षक -->
+            
+            <form action="{{ url_for('register') }}" method="post" class="needs-validation">  <!-- रजिस्टर रूट पर POST मेथड के साथ फॉर्म सबमिट होगा -->
+                <div class="form-group">  <!-- यूजरनेम के लिए फॉर्म ग्रुप -->
+                    <label for="username" class="form-label">Username</label>  <!-- यूजरनेम इनपुट के लिए लेबल -->
+                    <input type="text" id="username" name="username" class="form-input" required autofocus>  <!-- यूजरनेम इनपुट फील्ड, अनिवार्य और पेज लोड होने पर फोकस्ड -->
+                </div>
+                
+                <div class="form-group">  <!-- ईमेल के लिए फॉर्म ग्रुप -->
+                    <label for="email" class="form-label">Email</label>  <!-- ईमेल इनपुट के लिए लेबल -->
+                    <input type="email" id="email" name="email" class="form-input" required>  <!-- ईमेल इनपुट फील्ड, ईमेल टाइप अनिवार्य -->
+                </div>
+                
+                <div class="form-group">  <!-- पासवर्ड के लिए फॉर्म ग्रुप -->
+                    <label for="password" class="form-label">Password</label>  <!-- पासवर्ड इनपुट के लिए लेबल -->
+                    <input type="password" id="password" name="password" class="form-input" required minlength="8">  <!-- पासवर्ड इनपुट फील्ड, न्यूनतम 8 अक्षर अनिवार्य -->
+                    <small style="display: block; margin-top: 5px; color: #666;">Password must be at least 8 characters long</small>  <!-- पासवर्ड की आवश्यकता के लिए हेल्पर टेक्स्ट -->
+                </div>
+                
+                <div class="form-group">  <!-- पासवर्ड कन्फर्मेशन के लिए फॉर्म ग्रुप -->
+                    <label for="confirm-password" class="form-label">Confirm Password</label>  <!-- कन्फर्म पासवर्ड के लिए लेबल -->
+                    <input type="password" id="confirm-password" name="confirm_password" class="form-input" required minlength="8">  <!-- कन्फर्म पासवर्ड इनपुट फील्ड, पासवर्ड के समान आवश्यकताएँ -->
+                </div>
+                
+                <div style="display: flex; align-items: center; margin-bottom: 20px;">  <!-- टर्म्स एंड कंडिशंस चेकबॉक्स के लिए कंटेनर -->
+                    <input type="checkbox" id="terms" required style="margin-right: 10px;">  <!-- चेकबॉक्स इनपुट, अनिवार्य -->
+                    <label for="terms">I agree to the <a href="#">Terms and Conditions</a></label>  <!-- चेकबॉक्स का लेबल और टर्म्स पेज का लिंक -->
+                </div>
+                
+                <button type="submit" class="btn btn-secondary" style="width: 100%;">Create Account</button>  <!-- फॉर्म सबमिट बटन, पूरी चौड़ाई -->
+            </form>
+            
+            <a href="{{ url_for('login') }}" class="auth-link">  <!-- लॉगिन पेज का लिंक -->
+                Already have an account? Login here
+            </a>
+            
+            <div style="margin-top: 30px; text-align: center;">  <!-- सोशल रजिस्ट्रेशन ऑप्शन्स का कंटेनर -->
+                <p style="margin-bottom: 15px; color: #666;">Or register with</p>  <!-- सोशल रजिस्ट्रेशन ऑप्शन्स के लिए टेक्स्ट -->
+                <div style="display: flex; justify-content: center; gap: 20px;">  <!-- सोशल आइकन्स के लिए स्पेसिंग के साथ कंटेनर -->
+                    <a href="#" style="color: #3b5998; font-size: 24px;"><i class="fab fa-facebook"></i></a>  <!-- फेसबुक आइकन, ब्रांड कलर के साथ -->
+                    <a href="#" style="color: #db4a39; font-size: 24px;"><i class="fab fa-google"></i></a>  <!-- गूगल आइकन, ब्रांड कलर के साथ -->
+                    <a href="#" style="color: #00acee; font-size: 24px;"><i class="fab fa-twitter"></i></a>  <!-- ट्विटर आइकन, ब्रांड कलर के साथ -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

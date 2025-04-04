@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} - BikesCars{% endblock %}
+
+{% block content %}
+<section class="product-detail">
+    <div class="container">
+        <div class="product-detail-container">
+            <div class="product-detail-image">
+                <img src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product.name }}" class="product-detail-img">
+            </div>
+            
+            <div class="product-detail-info">
+                <h1>{{ product.name }}</h1>
+                <p class="product-detail-price">${{ product.price | round(2) }}</p>
+                
+                <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; margin-right: 20px;">
+                        <i class="fas fa-star" style="color: #f39c12;"></i>
+                        <i class="fas fa-star" style="color: #f39c12;"></i>
+                        <i class="fas fa-star" style="color: #f39c12;"></i>
+                        <i class="fas fa-star" style="color: #f39c12;"></i>
+                        <i class="fas fa-star-half-alt" style="color: #f39c12;"></i>
+                        <span style="margin-left: 5px; color: #666;">(4.5/5)</span>
+                    </div>
+                    
+                    <div style="color: {% if product.stock > 5 %}var(--success-color){% elif product.stock > 0 %}orange{% else %}var(--danger-color){% endif %}; display: flex; align-items: center;">
+                        <i class="fas {% if product.stock > 5 %}fa-check-circle{% elif product.stock > 0 %}fa-exclamation-circle{% else %}fa-times-circle{% endif %}"></i>
+                        <span style="margin-left: 5px;">
+                            {% if product.stock > 5 %}
+                            In Stock
+                            {% elif product.stock > 0 %}
+                            Low Stock ({{ product.stock }} left)
+                            {% else %}
+                            Out of Stock
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                
+                <p class="product-detail-desc">{{ product.description }}</p>
+                
+                <div style="margin-bottom: 30px; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 20px 0;">
+                    <h3 style="margin-bottom: 15px; color: var(--dark-color);">Specifications</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        {% if product.category == 'bike' %}
+                        <li style="margin-bottom: 10px; display: flex;"><span style="min-width: 120px; font-weight: bold;">Type:</span> {{ product.name.split()[0] }} Bike</li>
+                        <li style="margin-bottom: 10px; display: flex;"><span style="min-width: 120px; font-weight: bold;">Frame:</span> Lightweight Aluminum</li>
+                        <li style="margin-bottom: 10px; display: flex;"><span style="min-width: 120px; font-weight: bold;">Gears:</span> 21-Speed Shimano</li>
+                        <li style="margin-bottom: 10px; display: flex;"><span style="min-width: 120px; font-weight: bold;">Brake Type:</span> Hydraulic Disc</li>
+                        <li style="margin-bottom: 10px; display: flex;"><span style="min-width: 120px; font-weight: bold;">Weight:</span> 12.5 kg</li>
+                        {% else %}
+                        <li style="margin-bottom: 10px; display: flex;"><span style="min-width: 120px; font-weight: bold;">Type:</span> {{ product.name.split()[0] }}</li>
+                        <li style="margin-bottom: 10px; display: flex;"><span style="min-width: 120px; font-weight: bold;">Engine:</span> 2.0L Turbo</li>
+                        <li style="margin-bottom: 10px; display: flex;"><span style="min-width: 120px; font-weight: bold;">Horsepower:</span> 248 HP</li>
+                        <li style="margin-bottom: 10px; display: flex;"><span style="min-width: 120px; font-weight: bold;">Transmission:</span> 8-Speed Automatic</li>
+                        <li style="margin-bottom: 10px; display: flex;"><span style="min-width: 120px; font-weight: bold;">Fuel Economy:</span> 30 MPG combined</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                {% if product.stock > 0 and 'user_id' in session %}
+                <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post" class="add-to-cart-form">
+                    <div style="display: flex; align-items: center; margin-right: 15px;">
+                        <button type="button" class="btn quantity-min" style="border-radius: 4px 0 0 4px; padding: 10px 12px;">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="quantity-input">
+                        <button type="button" class="btn quantity-add" style="border-radius: 0 4px 4px 0; padding: 10px 12px;">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-secondary" style="flex: 1;">
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    </button>
+                </form>
+                {% elif product.stock > 0 %}
+                <a href="{{ url_for('login') }}" class="btn btn-secondary">
+                    Login to Purchase
+                </a>
+                {% else %}
+                <button class="btn" disabled style="background-color: #ccc; cursor: not-allowed;">
+                    Out of Stock
+                </button>
+                {% endif %}
+                
+                <div style="margin-top: 30px;">
+                    <h3 style="margin-bottom: 15px; color: var(--dark-color);">Share This Product</h3>
+                    <div style="display: flex; gap: 15px;">
+                        <a href="#" style="color: #3b5998; font-size: 24px;"><i class="fab fa-facebook"></i></a>
+                        <a href="#" style="color: #1da1f2; font-size: 24px;"><i class="fab fa-twitter"></i></a>
+                        <a href="#" style="color: #0e76a8; font-size: 24px;"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" style="color: #25D366; font-size: 24px;"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Related Products -->
+        <div style="margin-top: 60px;">
+            <h2 class="section-title">You May Also Like</h2>
+            <div class="product-grid">
+                {% for prod in [1, 2, 3] %}
+                {% set related = product %}
+                <div class="product-card">
+                    <img src="{{ url_for('static', filename='images/' + related.image) }}" alt="{{ related.name }}" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">{{ related.name }}</h3>
+                        <p class="product-price">${{ related.price | round(2) }}</p>
+                        <a href="{{ url_for('product_detail', product_id=related.id) }}" class="btn">View Details</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

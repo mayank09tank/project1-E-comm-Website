@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Confirmation - BikesCars{% endblock %}
+
+{% block content %}
+<section class="order-confirmation">
+    <div class="container">
+        <div class="confirmation-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        
+        <h1 style="margin-bottom: 15px; color: var(--dark-color);">Order Confirmed!</h1>
+        <p style="margin-bottom: 30px; font-size: 1.2rem;">Thank you for your purchase. Your order has been received and is being processed.</p>
+        
+        <div style="background-color: var(--light-color); display: inline-block; padding: 15px 30px; border-radius: 50px; margin-bottom: 40px;">
+            <p style="margin: 0; font-size: 1.1rem; font-weight: 500;">Order #{{ order.id }}</p>
+        </div>
+        
+        <div class="order-details">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee;">
+                <div>
+                    <h3 style="margin-bottom: 10px; color: var(--dark-color);">Order Details</h3>
+                    <p style="margin-bottom: 5px;">Date: {{ order.order_date.strftime('%B %d, %Y') }}</p>
+                    <p style="margin-bottom: 5px;">Status: <span style="color: var(--success-color); font-weight: 500;">{{ order.status|capitalize }}</span></p>
+                    <p>Total: ${{ order.total_amount | round(2) }}</p>
+                </div>
+                
+                <div style="text-align: right;">
+                    <h3 style="margin-bottom: 10px; color: var(--dark-color);">Shipping Address</h3>
+                    <p style="margin-bottom: 5px;">123 Customer Street</p>
+                    <p style="margin-bottom: 5px;">City, State, 12345</p>
+                    <p>Country</p>
+                </div>
+            </div>
+            
+            <h3 style="margin-bottom: 20px; color: var(--dark-color);">Order Items</h3>
+            
+            <div class="order-items">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #f9f9f9; border-bottom: 2px solid #eee;">
+                            <th style="padding: 15px; text-align: left;">Product</th>
+                            <th style="padding: 15px; text-align: center;">Quantity</th>
+                            <th style="padding: 15px; text-align: right;">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order.order_items %}
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 15px; text-align: left;">{{ item.product_name }}</td>
+                            <td style="padding: 15px; text-align: center;">{{ item.quantity }}</td>
+                            <td style="padding: 15px; text-align: right;">${{ item.price | round(2) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="margin-top: 30px; text-align: right;">
+                <p style="margin-bottom: 10px;"><span style="display: inline-block; width: 150px; text-align: left;">Subtotal:</span> ${{ (order.total_amount / 1.1) | round(2) }}</p>
+                <p style="margin-bottom: 10px;"><span style="display: inline-block; width: 150px; text-align: left;">Tax (10%):</span> ${{ (order.total_amount / 1.1 * 0.1) | round(2) }}</p>
+                <p style="margin-bottom: 10px;"><span style="display: inline-block; width: 150px; text-align: left;">Shipping:</span> Free</p>
+                <p style="font-size: 1.2rem; font-weight: bold; color: var(--primary-color);"><span style="display: inline-block; width: 150px; text-align: left;">Total:</span> ${{ order.total_amount | round(2) }}</p>
+            </div>
+        </div>
+        
+        <div style="margin-top: 40px; display: flex; justify-content: center; gap: 20px;">
+            <a href="{{ url_for('home') }}" class="btn">
+                <i class="fas fa-home"></i> Return to Homepage
+            </a>
+            <button class="btn btn-secondary" onclick="window.print()">
+                <i class="fas fa-print"></i> Print Receipt
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- What's Next Section -->
+<section style="padding: 60px 0; background-color: var(--light-color);">
+    <div class="container">
+        <h2 class="section-title">What's Next?</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: center;">
+            <div style="background-color: white; padding: 30px; border-radius: 8px; box-shadow: var(--box-shadow);">
+                <i class="fas fa-truck" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 20px;"></i>
+                <h3 style="margin-bottom: 15px; color: var(--dark-color);">Shipping</h3>
+                <p>Your order will be processed and shipped within 24 hours. You'll receive a tracking number via email.</p>
+            </div>
+            
+            <div style="background-color: white; padding: 30px; border-radius: 8px; box-shadow: var(--box-shadow);">
+                <i class="fas fa-question-circle" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 20px;"></i>
+                <h3 style="margin-bottom: 15px; color: var(--dark-color);">Support</h3>
+                <p>Have questions about your order? Our customer support team is ready to help you.</p>
+            </div>
+            
+            <div style="background-color: white; padding: 30px; border-radius: 8px; box-shadow: var(--box-shadow);">
+                <i class="fas fa-undo" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 20px;"></i>
+                <h3 style="margin-bottom: 15px; color: var(--dark-color);">Returns</h3>
+                <p>Not satisfied with your purchase? You can return it within 30 days for a full refund.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

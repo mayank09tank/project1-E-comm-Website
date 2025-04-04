@@ -1,0 +1,235 @@
+<!DOCTYPE html>  <!-- HTML5 डॉक्यूमेंट टाइप डिक्लेरेशन -->
+<html lang="en">  <!-- HTML रूट एलिमेंट जिसमें भाषा अंग्रेजी सेट की गई है -->
+<head>  <!-- हेड सेक्शन शुरू - मेटाडेटा और स्टाइल/स्क्रिप्ट रेफरेंस शामिल करता है -->
+    <meta charset="UTF-8">  <!-- कैरेक्टर एन्कोडिंग UTF-8 सेट की गई है -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- मोबाइल रेस्पॉन्सिवनेस के लिए व्यूपोर्ट सेटिंग -->
+    <title>{% block title %}BikesCars{% endblock %}</title>  <!-- पेज टाइटल जो कि चाइल्ड टेम्प्लेट द्वारा ओवरराइड किया जा सकता है -->
+    
+    <!-- बूटस्ट्रैप CSS - स्टाइलिंग के लिए फ्रेमवर्क -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- फॉन्ट अवेसम आइकॉन्स - विभिन्न आइकॉन्स के लिए लाइब्रेरी -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- कस्टम स्टाइलशीट - हमारे प्रोजेक्ट के लिए विशेष स्टाइल्स -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>  <!-- इनलाइन CSS स्टाइल्स -->
+        /* मुख्य कंटेनर स्टाइल्स */
+        body {
+            font-family: 'Roboto', sans-serif;  /* फॉन्ट फैमिली सेट करना */
+            color: #333;  /* टेक्स्ट कलर सेट करना */
+            line-height: 1.6;  /* लाइन स्पेसिंग सेट करना */
+        }
+        
+        /* नेविगेशन स्टाइल्स */
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* नेवबार के नीचे शैडो जोड़ना */
+            background-color: #fff;  /* बैकग्राउंड कलर सफेद सेट करना */
+        }
+        
+        .navbar-brand {
+            font-weight: 700;  /* ब्रांड नाम को बोल्ड करना */
+            font-size: 1.5rem;  /* ब्रांड नाम का फॉन्ट साइज बढ़ाना */
+        }
+        
+        /* प्रोडक्ट कार्ड स्टाइल्स */
+        .product-card {
+            border-radius: 10px;  /* कार्ड के कोने गोल करना */
+            overflow: hidden;  /* कार्ड के बाहर कोई कंटेंट न दिखे */
+            transition: transform 0.3s, box-shadow 0.3s;  /* स्मूथ ट्रांजिशन इफेक्ट */
+            margin-bottom: 20px;  /* नीचे मार्जिन जोड़ना */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  /* कार्ड पर हल्का शैडो */
+            height: 100%;  /* कार्ड की हाइट 100% सेट करना */
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);  /* होवर पर कार्ड को ऊपर उठाना */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);  /* होवर पर ज्यादा गहरा शैडो */
+        }
+        
+        .product-img {
+            height: 200px;  /* प्रोडक्ट इमेज की हाइट फिक्स करना */
+            object-fit: cover;  /* इमेज को अच्छे से फिट करना */
+            width: 100%;  /* इमेज को पूरी चौड़ाई देना */
+        }
+        
+        /* फूटर स्टाइल्स */
+        footer {
+            background-color: #343a40;  /* फूटर का बैकग्राउंड कलर डार्क सेट करना */
+            color: white;  /* फूटर का टेक्स्ट कलर सफेद सेट करना */
+            padding: 30px 0;  /* फूटर में पैडिंग जोड़ना */
+        }
+        
+        /* हेरो सेक्शन स्टाइल्स */
+        .hero-section {
+            background: linear-gradient(to right, #667eea, #764ba2);  /* हेरो सेक्शन के लिए ग्रेडिएंट बैकग्राउंड */
+            color: white;  /* टेक्स्ट कलर सफेद सेट करना */
+            padding: 80px 0;  /* पैडिंग जोड़ना */
+            text-align: center;  /* टेक्स्ट को सेंटर में करना */
+        }
+        
+        /* अथेंटिकेशन फॉर्म स्टाइल्स */
+        .auth-container {
+            max-width: 450px;  /* अधिकतम चौड़ाई सेट करना */
+            margin: 0 auto;  /* सेंटर में रखना */
+            padding: 30px;  /* पैडिंग जोड़ना */
+            background: white;  /* बैकग्राउंड सफेद सेट करना */
+            border-radius: 10px;  /* कोने गोल करना */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);  /* शैडो जोड़ना */
+        }
+        
+        .auth-title {
+            text-align: center;  /* टाइटल को सेंटर में करना */
+            margin-bottom: 30px;  /* नीचे मार्जिन जोड़ना */
+            font-weight: 600;  /* टाइटल को बोल्ड करना */
+        }
+        
+        .form-group {
+            margin-bottom: 20px;  /* फॉर्म ग्रुप के नीचे मार्जिन जोड़ना */
+        }
+        
+        .form-label {
+            display: block;  /* लेबल को ब्लॉक एलिमेंट बनाना */
+            margin-bottom: 8px;  /* नीचे मार्जिन जोड़ना */
+            font-weight: 500;  /* टेक्स्ट को बोल्ड करना */
+        }
+        
+        .form-input {
+            width: 100%;  /* पूरी चौड़ाई सेट करना */
+            padding: 12px 15px;  /* पैडिंग जोड़ना */
+            border: 1px solid #ddd;  /* बॉर्डर जोड़ना */
+            border-radius: 5px;  /* कोने गोल करना */
+            font-size: 1rem;  /* फॉन्ट साइज सेट करना */
+        }
+        
+        .auth-link {
+            display: block;  /* लिंक को ब्लॉक एलिमेंट बनाना */
+            text-align: center;  /* टेक्स्ट को सेंटर में करना */
+            margin-top: 15px;  /* ऊपर मार्जिन जोड़ना */
+            color: #6c757d;  /* टेक्स्ट कलर सेट करना */
+            text-decoration: none;  /* अंडरलाइन हटाना */
+        }
+    </style>
+</head>
+<body>  <!-- बॉडी सेक्शन शुरू - मुख्य कंटेंट शामिल करता है -->
+    <!-- नेविगेशन बार - वेबसाइट के मुख्य नेविगेशन के लिए -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">  <!-- कंटेनर जो कंटेंट को सेंटर में रखता है -->
+            <a class="navbar-brand" href="{{ url_for('home') }}">  <!-- होम पेज का लिंक और ब्रांड लोगो/नाम -->
+                <i class="fas fa-bicycle me-2"></i><i class="fas fa-car me-2"></i>BikesCars
+            </a>
+            
+            <!-- मोबाइल में नेविगेशन टॉगल बटन -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>  <!-- हैमबर्गर मेनू आइकन -->
+            </button>
+            
+            <!-- नेविगेशन लिंक्स - कोलैप्स होने योग्य -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">  <!-- नेविगेशन आइटम्स की लिस्ट -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('home') }}">Home</a>  <!-- होम पेज का लिंक -->
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('products_by_category', category='bike') }}">Bikes</a>  <!-- बाइक्स कैटेगरी का लिंक -->
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('products_by_category', category='car') }}">Cars</a>  <!-- कार्स कैटेगरी का लिंक -->
+                    </li>
+                    
+                    <!-- कार्ट लिंक -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('cart') }}">
+                            <i class="fas fa-shopping-cart"></i> Cart  <!-- कार्ट आइकन और टेक्स्ट -->
+                        </a>
+                    </li>
+                    
+                    <!-- यूजर लॉगिन स्टेटस के आधार पर उपयुक्त लिंक दिखाना -->
+                    {% if 'user_id' in session %}  <!-- अगर यूजर लॉग इन है तो -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-user"></i> {{ session['username'] }}  <!-- यूजरनेम दिखाना -->
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">
+                                <i class="fas fa-sign-out-alt"></i> Logout  <!-- लॉगआउट बटन -->
+                            </a>
+                        </li>
+                    {% else %}  <!-- अगर यूजर लॉग इन नहीं है तो -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login') }}">
+                                <i class="fas fa-sign-in-alt"></i> Login  <!-- लॉगिन बटन -->
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('register') }}">
+                                <i class="fas fa-user-plus"></i> Register  <!-- रजिस्टर बटन -->
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- फ्लैश मैसेज सेक्शन - यूजर नोटिफिकेशन के लिए -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mt-3">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category if category != 'message' else 'info' }} alert-dismissible fade show">
+                        {{ message }}  <!-- अलर्ट मैसेज दिखाना -->
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>  <!-- अलर्ट को बंद करने का बटन -->
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    
+    <!-- मेन कंटेंट ब्लॉक - चाइल्ड टेम्प्लेट्स द्वारा ओवरराइड किया जाएगा -->
+    {% block content %}{% endblock %}
+    
+    <!-- फूटर सेक्शन -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <!-- कॉपीराइट सेक्शन -->
+                <div class="col-md-4">
+                    <h5>BikesCars</h5>  <!-- फूटर में कंपनी नाम -->
+                    <p>&copy; 2023 BikesCars. All rights reserved.</p>  <!-- कॉपीराइट नोटिस -->
+                </div>
+                
+                <!-- क्विक लिंक्स सेक्शन -->
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>  <!-- क्विक लिंक्स हेडिंग -->
+                    <ul class="list-unstyled">  <!-- बिना बुलेट्स की लिस्ट -->
+                        <li><a href="#" class="text-white">About Us</a></li>  <!-- अबाउट अस लिंक -->
+                        <li><a href="#" class="text-white">Contact</a></li>  <!-- कॉन्टैक्ट लिंक -->
+                        <li><a href="#" class="text-white">Privacy Policy</a></li>  <!-- प्राइवेसी पॉलिसी लिंक -->
+                        <li><a href="#" class="text-white">Terms of Service</a></li>  <!-- टर्म्स ऑफ सर्विस लिंक -->
+                    </ul>
+                </div>
+                
+                <!-- सोशल मीडिया सेक्शन -->
+                <div class="col-md-4">
+                    <h5>Follow Us</h5>  <!-- फॉलो अस हेडिंग -->
+                    <div class="d-flex">  <!-- आइकन्स को एक पंक्ति में रखने के लिए फ्लेक्स कंटेनर -->
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook-f fa-lg"></i></a>  <!-- फेसबुक आइकन -->
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-lg"></i></a>  <!-- ट्विटर आइकन -->
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>  <!-- इंस्टाग्राम आइकन -->
+                        <a href="#" class="text-white"><i class="fab fa-youtube fa-lg"></i></a>  <!-- यूट्यूब आइकन -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- बूटस्ट्रैप JS - इंटरैक्टिव कंपोनेंट्स के लिए -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- कस्टम जावास्क्रिप्ट - हमारे प्रोजेक्ट के लिए विशेष स्क्रिप्ट्स -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html> 

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Cart - BikesCars{% endblock %}
+
+{% block content %}
+<section style="padding: 60px 0;">
+    <div class="container">
+        <h1 class="section-title">Your Shopping Cart</h1>
+        
+        {% if cart_items %}
+        <div class="cart-content">
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                    <tr>
+                        <td data-label="Product" style="display: flex; align-items: center;">
+                            <img src="{{ url_for('static', filename='images/' + item.product.image) }}" alt="{{ item.product.name }}" style="width: 80px; height: 60px; object-fit: cover; margin-right: 15px; border-radius: 4px;">
+                            <div>
+                                <h3 style="font-size: 1.1rem; margin-bottom: 5px;">{{ item.product.name }}</h3>
+                                <p style="color: #666; font-size: 0.9rem;">{{ item.product.category|capitalize }}</p>
+                            </div>
+                        </td>
+                        <td data-label="Price">${{ item.product.price | round(2) }}</td>
+                        <td data-label="Quantity">
+                            <form id="update-form-{{ item.id }}" action="#" method="post" style="display: flex; align-items: center;">
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" class="cart-quantity-input" data-form-id="update-form-{{ item.id }}" style="width: 60px; padding: 5px; border: 1px solid #ddd; border-radius: 4px; text-align: center;">
+                            </form>
+                        </td>
+                        <td data-label="Total" style="font-weight: bold; color: var(--primary-color);">${{ (item.product.price * item.quantity) | round(2) }}</td>
+                        <td data-label="Action">
+                            <form action="#" method="post">
+                                <input type="hidden" name="item_id" value="{{ item.id }}">
+                                <button type="submit" class="btn btn-danger" style="padding: 5px 10px;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <div class="cart-total">
+                <p>Subtotal: <span>${{ total | round(2) }}</span></p>
+                <p>Tax (10%): <span>${{ (total * 0.1) | round(2) }}</span></p>
+                <p style="font-size: 1.4rem; margin-top: 10px;">Total: <span>${{ (total * 1.1) | round(2) }}</span></p>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+                <a href="{{ url_for('home') }}" class="btn">
+                    <i class="fas fa-arrow-left"></i> Continue Shopping
+                </a>
+                <a href="{{ url_for('checkout') }}" class="btn btn-secondary">
+                    Proceed to Checkout <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 50px 0;">
+            <i class="fas fa-shopping-cart" style="font-size: 5rem; color: var(--light-color); margin-bottom: 20px;"></i>
+            <h2>Your Cart is Empty</h2>
+            <p style="margin-bottom: 30px;">Looks like you haven't added any products to your cart yet.</p>
+            <a href="{{ url_for('home') }}" class="btn btn-secondary">Start Shopping</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %} 

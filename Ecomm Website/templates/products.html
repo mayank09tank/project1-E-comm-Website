@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ category|capitalize }}s - BikesCars{% endblock %}
+
+{% block content %}
+<!-- Category Hero -->
+<section class="hero" style="padding: 40px 0;">
+    <div class="container">
+        <h1>{{ category|capitalize }}s Collection</h1>
+        <p>Discover our premium range of {{ category }}s for every need and preference.</p>
+    </div>
+</section>
+
+<!-- Products Section -->
+<section class="products-section">
+    <div class="container">
+        {% if products %}
+        <!-- Filter Controls -->
+        <div style="margin-bottom: 30px; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
+            <button class="btn filter-item active" data-filter="all">All {{ category|capitalize }}s</button>
+            {% if category == 'bike' %}
+            <button class="btn filter-item" data-filter="mountain">Mountain Bikes</button>
+            <button class="btn filter-item" data-filter="road">Road Bikes</button>
+            <button class="btn filter-item" data-filter="electric">Electric Bikes</button>
+            {% else %}
+            <button class="btn filter-item" data-filter="sedan">Sedans</button>
+            <button class="btn filter-item" data-filter="suv">SUVs</button>
+            <button class="btn filter-item" data-filter="electric">Electric Cars</button>
+            {% endif %}
+        </div>
+        
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card {% if 'Mountain' in product.name %}mountain{% elif 'Road' in product.name %}road{% elif 'SUV' in product.name %}suv{% elif 'Sedan' in product.name or 'Luxury' in product.name %}sedan{% elif 'Electric' in product.name %}electric{% endif %}">
+                <img src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product.name }}" class="product-img">
+                <div class="product-info">
+                    <h3 class="product-title">{{ product.name }}</h3>
+                    <p class="product-price">${{ product.price | round(2) }}</p>
+                    <p class="product-desc">{{ product.description }}</p>
+                    <div style="display: flex; gap: 10px;">
+                        <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn">View Details</a>
+                        {% if 'user_id' in session %}
+                        <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post" style="display: inline;">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn btn-secondary">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 50px 0;">
+            <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 20px;"></i>
+            <h2>No Products Found</h2>
+            <p>We couldn't find any {{ category }}s at the moment. Please check back later.</p>
+            <a href="{{ url_for('home') }}" class="btn" style="margin-top: 20px;">Back to Home</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section style="padding: 60px 0; background-color: var(--light-color); text-align: center;">
+    <div class="container">
+        <h2 style="margin-bottom: 20px; color: var(--dark-color);">Can't Find What You're Looking For?</h2>
+        <p style="margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto;">Our inventory is constantly updating. Contact our team and we'll help you find your perfect {{ category }}.</p>
+        <a href="#" class="btn btn-secondary">Contact Us</a>
+    </div>
+</section>
+{% endblock %} 
